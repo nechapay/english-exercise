@@ -1,0 +1,136 @@
+<!doctype html>
+
+<html>
+
+<head lang="ru-RU">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+
+    <title>Английский язык</title>
+
+    <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="js/jquery-ui-1.12.1.min.js" type="text/javascript"></script>
+    <script src="js/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
+    <script src="js/vue.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/js-xlsx-master/dist/xlsx.full.min.js" type="text/javascript"></script>
+    <script src="js/FileSaver.min.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="res/fontawesome-free-5.0.8/web-fonts-with-css/css/fontawesome-all.css" >
+
+    <link rel="icon" href="img/logo2.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/logo2.png" type="image/x-icon">
+</head>
+<body>
+<div class="content-container">
+    <div class="worktable-container">
+        <div id="username_label" class="my-username-label">
+            <p><b>Пользователь:</b> {{ username }}</p>
+        </div>
+        <div id="level1" v-if="isLevelOne"  class="worktable">
+            <div class="main-word my-section">
+                <div class="section-item"><p>{{ mainWord }}</p></div>
+            </div>
+            <div class="sub-word my-section">
+                <div v-for="item in subWords" :key="item.id" class="section-item">
+                    <input class="my-input" type="text" name="word" required v-model="item.word">
+                </div>
+            </div>
+            <div class="translation my-section">
+                <div v-for="item in subWords" :key="item.id" class="section-item">
+                    <p>{{ item.translation.join('/') }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="level2" v-if="isLevelTwo"  class="worktable">
+            <div class="main-word my-section">
+            </div>
+            <div class="sub-word my-section">
+                <div v-for="item in subWords" :key="item.id" class="section-item">
+                    <input class="my-input" type="text" name="word" required v-model="item.word">
+                </div>
+            </div>
+            <div class="translation my-section">
+                <div v-for="item in subWords" :key="item.id" class="section-item">
+                    <p>{{ item.translation.join('/') }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="level3" v-if="isLevelThree"  class="worktable">
+            <div class="main-word my-section">
+            </div>
+            <div class="translation my-section">
+                <div v-for="item in subWords" :key="item.id" class="section-item">
+                    <input class="my-input" type="text" name="trans" required v-model="item.trans">
+                </div>
+            </div>
+            <div class="sub-word my-section">
+                <div v-for="item in subWords" :key="item.id" class="section-item">
+                    <p>{{ mainWord }} {{ item.word }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="results-container"></div>
+    </div>
+    <div id="task_header" class="my-header" v-if="isHidden">
+        <p>Задание {{ idx }} из {{ count }}</p>
+    </div>
+
+    <div class="task-controls">
+        <button class="my-button prev my-hide">Назад</button>
+        <button id="check" class="my-button check">Проверить</button>
+        <button class="my-button next my-hide">Далее</button>
+        <button id="results_show" class="my-button hide">Результаты</button>
+        <button id="save_to_file" class="my-button hide">Сохранить в файл</button>
+    </div>
+    <div id="check_label"></div>
+    <div class="my-copyright"><b>© Краснодарское ПКУ</b></div>
+</div>
+<div class="result-label"></div>
+<div id="myViewer" class="modal viewer">
+    <div class="modal-content viewer">
+        <span class="close hide">&times;</span>
+        <span id="diffTitle" class="modal-title">Выберите уровень сложности</span>
+        <label for="username">Имя пользователя</label>
+        <input id="username" type="text" name="username" required title="Имя пользователя">
+        <div class="viewer-buttons">
+            <button id="level_1" class="difficulty-button my-button">1</button>
+            <button id="level_2" class="difficulty-button my-button">2</button>
+            <button id="level_3" class="difficulty-button my-button">3</button>
+        </div>
+    </div>
+</div>
+<div id="my-results-viewer" class="modal viewer">
+    <div class="modal-content viewer res-viewer">
+        <span id="my-results-viewer-close" class="close">&times;</span>
+        <div id="resViewer" class="worktable">
+            <div class="main-word my-section">
+                <div class="section-item">
+                    <p>{{ mainWord }}</p>
+                </div>
+            </div>
+            <div class="sub-word my-section">
+                <div v-for="item in subWords" :key="item.id" class="section-item">
+                    <p>{{ item.word }}</p>
+                </div>
+            </div>
+            <div class="sub-word my-section">
+                <div v-for="item in subWords" :key="item.id" class="section-item">
+                    <p>{{ item.correctWord }}</p>
+                </div>
+            </div>
+            <div class="translation my-section">
+                <div v-for="item in subWords" :key="item.id" class="section-item">
+                    <p>{{ item.translation }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/main.js" type="text/javascript"></script>
+</html>
